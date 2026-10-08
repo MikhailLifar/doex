@@ -60,6 +60,10 @@ class VizPanel(QWidget):
         root.addWidget(self.canvas)
         self._fill_axis_combos()
         self.refresh()
+        # after initial paint — changing axes/mode redraws Maps
+        self.x_combo.currentIndexChanged.connect(self.refresh)
+        self.y_combo.currentIndexChanged.connect(self.refresh)
+        self.mode_combo.currentIndexChanged.connect(self.refresh)
 
     def set_campaign(self, campaign: Campaign) -> None:
         self.campaign = campaign

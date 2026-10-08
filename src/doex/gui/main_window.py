@@ -222,10 +222,13 @@ class CampaignPage(QWidget):
         adv_wrap = QFrame()
         adv_wrap.setFrameShape(QFrame.StyledPanel)
         adv_l = QVBoxLayout(adv_wrap)
+        adv_l.setContentsMargins(6, 6, 6, 6)
         self.adv_toggle = QToolButton()
         self.adv_toggle.setText("Advanced ▸")
         self.adv_toggle.setCheckable(True)
         self.adv_toggle.setChecked(False)
+        self.adv_toggle.setToolButtonStyle(Qt.ToolButtonTextOnly)
+        self.adv_toggle.setMinimumHeight(28)
         self.adv_toggle.toggled.connect(self._toggle_advanced)
         adv_l.addWidget(self.adv_toggle)
         self.adv_body = QWidget()
@@ -233,10 +236,11 @@ class CampaignPage(QWidget):
         self.adv_body_layout.setContentsMargins(0, 0, 0, 0)
         self.adv_body.setVisible(False)
         adv_l.addWidget(self.adv_body)
-        adv_wrap.setMinimumWidth(40)
+        adv_wrap.setMinimumWidth(120)
         splitter.addWidget(adv_wrap)
         splitter.setStretchFactor(0, 5)
         splitter.setStretchFactor(1, 1)
+        splitter.setSizes([900, 160])
         self._adv_wrap = adv_wrap
         self._splitter = splitter
 
@@ -351,6 +355,17 @@ class MainWindow(QMainWindow):
         act_suggest.setShortcut(QKeySequence("Ctrl+Return"))
         act_suggest.triggered.connect(self.suggest_next)
         run_menu.addAction(act_suggest)
+
+        view_menu = self.menuBar().addMenu("&View")
+        for i, name in enumerate(("Runs", "Space", "Maps"), start=1):
+            act = QAction(f"{name} tab", self)
+            act.setShortcut(QKeySequence(f"Ctrl+{i}"))
+            act.triggered.connect(lambda _checked=False, idx=i - 1: self._focus_tab(idx))
+            view_menu.addAction(act)
+
+    def _focus_tab(self, index: int) -> None:
+        if self.stack.currentWidget() is self.campaign_page:
+            self.campaign_page.tabs.setCurrentIndex(index)
 
     def show_home(self) -> None:
         self.home.refresh_recent()

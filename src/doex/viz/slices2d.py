@@ -20,6 +20,26 @@ STATUS_COLORS = {
 }
 
 
+def _clear_axes(ax: Axes) -> None:
+    """Clear axes and any colorbars attached to the same figure."""
+    fig = ax.figure
+    # Remove prior colorbars so Refresh does not stack them
+    for other in list(fig.axes):
+        if other is not ax and hasattr(other, "get_label") and (
+            other.get_label() == "<colorbar>" or getattr(other, "_colorbar", False)
+        ):
+            fig.delaxes(other)
+    # Also drop orphaned axes that are not the main plot (matplotlib colorbars)
+    for other in list(fig.axes):
+        if other is ax:
+            continue
+        # colorbar axes are typically much thinner
+        bbox = other.get_position()
+        if bbox.width < 0.08 or bbox.height < 0.08:
+            fig.delaxes(other)
+    ax.clear()
+
+
 def plot_scatter(
     ax: Axes,
     df: pd.DataFrame,
@@ -29,7 +49,7 @@ def plot_scatter(
     y_name: str,
     color_by: str = "status",
 ) -> None:
-    ax.clear()
+    _clear_axes(ax)
     if df is None or len(df) == 0:
         ax.set_title("No runs yet")
         ax.set_xlabel(x_name)
@@ -82,7 +102,7 @@ def plot_slice(
     *,
     overlay_points: bool = True,
 ) -> None:
-    ax.clear()
+    _clear_axes(ax)
     X = grid["X"]
     Y = grid["Y"]
     Z = grid["Z"]
