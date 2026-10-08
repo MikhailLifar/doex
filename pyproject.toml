@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "doex"
+version = "0.1.0a0"
+description = "Adaptive DoE / experiment-campaign GUI: load tables, suggest next runs, 2D maps. For materials and process labs."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [
+    { name = "Mikhail S. Lifar", email = "mikhailkulkov11@gmail.com" },
+]
+keywords = [
+    "doe",
+    "design of experiments",
+    "bayesian optimization",
+    "active learning",
+    "materials",
+    "gui",
+    "pyqt",
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = [
+    "numpy>=1.24,<3",
+    "pandas>=2.0,<3.1",
+    "scikit-learn>=1.3,<1.8",
+    "matplotlib>=3.7,<3.11",
+    "PyQt5>=5.15,<6",
+]
+
+[project.urls]
+Homepage = "https://github.com/MikhailLifar/doex"
+Repository = "https://github.com/MikhailLifar/doex"
+Documentation = "https://github.com/MikhailLifar/doex#readme"
+
+[project.scripts]
+doex = "doex.cli:main"
+
+[project.optional-dependencies]
+dev = ["build", "pip", "pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["doex*"]
