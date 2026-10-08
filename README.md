@@ -2,7 +2,7 @@
 
 Adaptive **design-of-experiments** desktop app for lab campaigns: import existing tables, suggest the next batch of runs, edit bounds/algorithms on the fly, inspect **2D maps** in the GUI.
 
-> Spec (ТЗ): see [`TZ.md`](TZ.md).
+> Spec (ТЗ): see [`TZ.md`](TZ.md). MVP (Stage 0–1): usable GUI.
 
 ## Install
 
