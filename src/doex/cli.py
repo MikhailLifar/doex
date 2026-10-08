@@ -51,6 +51,25 @@ def _doctor() -> int:
         except Exception as exc:  # noqa: BLE001 — doctor must report any failure
             ok = False
             print(f"FAIL {label}: {exc}")
+
+    # Display / Qt platform (best-effort)
+    import os
+
+    display = os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")
+    if display:
+        print(f"OK  display ({display})")
+        try:
+            from PyQt5.QtWidgets import QApplication
+
+            app = QApplication.instance() or QApplication([])
+            print(f"OK  Qt platform ({app.platformName()})")
+        except Exception as exc:  # noqa: BLE001
+            ok = False
+            print(f"FAIL Qt platform: {exc}")
+            print("     hint: install libxcb-icccm4 libxcb-image0 libxcb-keysyms1 "
+                  "libxcb-render-util0 libxkbcommon-x11-0")
+    else:
+        print("WARN display not set (GUI needs DISPLAY or Wayland)")
     return 0 if ok else 1
 
 
