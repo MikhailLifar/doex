@@ -36,7 +36,7 @@ from doex.gui.next_panel import NextPanel
 from doex.gui.runs_panel import RunsPanel
 from doex.gui.space_panel import SpacePanel
 from doex.gui.viz_panel import VizPanel
-from doex.gui.widgets.dialogs import show_error, show_info
+from doex.gui.widgets.dialogs import show_error
 
 RECENT_PATH = Path.home() / ".doex_recent.json"
 MAX_RECENT = 12
@@ -415,7 +415,7 @@ class MainWindow(QMainWindow):
         try:
             saved = self.campaign.save(path)
             _remember(saved)
-            show_info(self, "Saved", f"Campaign saved to:\n{saved}")
+            self.statusBar().showMessage(f"Saved: {saved}", 5000)
         except Exception as exc:  # noqa: BLE001
             show_error(self, "Save failed", str(exc), exc)
 
@@ -441,7 +441,7 @@ class MainWindow(QMainWindow):
             self.campaign.import_table(wiz.df, wiz.mapping)
             self.campaign_page.bind_campaign(self.campaign)
             self.campaign_page.refresh()
-            show_info(self, "Import", f"Imported {len(wiz.df)} rows.")
+            self.statusBar().showMessage(f"Imported {len(wiz.df)} rows", 5000)
         except Exception as exc:  # noqa: BLE001
             show_error(self, "Import failed", str(exc), exc)
 
@@ -464,7 +464,7 @@ class MainWindow(QMainWindow):
                 _remember(path)
             else:
                 self.campaign.export(path, kind="runs")
-            show_info(self, "Export", f"Exported to:\n{path}")
+            self.statusBar().showMessage(f"Exported: {path}", 5000)
         except Exception as exc:  # noqa: BLE001
             show_error(self, "Export failed", str(exc), exc)
 
@@ -474,7 +474,7 @@ class MainWindow(QMainWindow):
         try:
             batch = self.campaign.suggest()
             self.campaign_page.refresh()
-            show_info(self, "Suggest", f"Proposed {len(batch)} run(s). See Runs tab.")
             self.campaign_page.tabs.setCurrentIndex(0)
+            self.statusBar().showMessage(f"Proposed {len(batch)} run(s)", 5000)
         except Exception as exc:  # noqa: BLE001
             show_error(self, "Suggest failed", str(exc), exc)
